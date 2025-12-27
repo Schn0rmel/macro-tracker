@@ -63,17 +63,30 @@
 
     <div class="card">
         <h2 data-t="secLog">Eintrag</h2>
-        <div class="log-grid">
-            <div class="input-group full"><label data-t="labName">Produkt</label><input type="text" id="name" placeholder="..."></div>
-            <div class="input-group full"><label data-t="labGrams">Gramm</label><input type="number" id="grams" value="100" oninput="if(value>10000)value=10000"></div>
-            <div class="input-group"><label><span class="f-dot">●</span> <span data-t="labFat">Fett</span></label><input type="number" id="fat" value="0" oninput="if(value>100)value=100"></div>
-            <div class="input-group"><label><span class="c-dot">●</span> <span data-t="labCarbs">Carbs</span></label><input type="number" id="carbs" value="0" oninput="if(value>100)value=100"></div>
-            <div class="input-group"><label><span class="p-dot">●</span> <span data-t="labProtein">Eiweiß</span></label><input type="number" id="protein" value="0" oninput="if(value>100)value=100"></div>
-            <div class="input-group"><label><span class="fi-dot">●</span> <span data-t="labFiber">Fiber</span></label><input type="number" id="fiber" value="0" oninput="if(value>100)value=100"></div>
+       <div class="log-grid">
+        <div class="input-group full">
+            <label data-t="labName">Produkt</label>
+            <input type="text" id="name" placeholder="...">
         </div>
-        <div class="form-actions">
-            <button class="btn-clear" onclick="resetInputs(true)" data-t="btnClear">Leeren</button>
-            <button class="btn-add" onclick="addItem()" data-t="btnAdd">Hinzufügen</button>
+        <div class="input-group full">
+            <label data-t="labGrams">Gramm</label>
+            <input type="number" id="grams" value="100" oninput="if(value>10000)value=10000" onfocus="if(this.value=='100')this.value=''" onblur="if(this.value=='')this.value='100'">
+        </div>
+        <div class="input-group">
+            <label><span class="f-dot">●</span> <span data-t="labFat">Fett</span></label>
+            <input type="number" id="fat" value="0" oninput="if(value>100)value=100" onfocus="if(this.value=='0')this.value=''" onblur="if(this.value=='')this.value='0'">
+        </div>
+        <div class="input-group">
+            <label><span class="c-dot">●</span> <span data-t="labCarbs">Carbs</span></label>
+            <input type="number" id="carbs" value="0" oninput="if(value>100)value=100" onfocus="if(this.value=='0')this.value=''" onblur="if(this.value=='')this.value='0'">
+        </div>
+        <div class="input-group">
+            <label><span class="p-dot">●</span> <span data-t="labProtein">Eiweiß</span></label>
+            <input type="number" id="protein" value="0" oninput="if(value>100)value=100" onfocus="if(this.value=='0')this.value=''" onblur="if(this.value=='')this.value='0'">
+        </div>
+        <div class="input-group">
+            <label><span class="fi-dot">●</span> <span data-t="labFiber">Fiber</span></label>
+            <input type="number" id="fiber" value="0" oninput="if(value>100)value=100" onfocus="if(this.value=='0')this.value=''" onblur="if(this.value=='')this.value='0'">
         </div>
     </div>
 
@@ -356,3 +369,4 @@
 </script>
 </body>
 </html>
+
