@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Macro Tracker Pro - Fixed Version</title>
+    <title>Macro Tracker Pro - Final</title>
     <style>
         :root { 
             --primary: #2563eb; --secondary: #7c3aed; --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
@@ -63,30 +63,35 @@
 
     <div class="card">
         <h2 data-t="secLog">Eintrag</h2>
-       <div class="log-grid">
-        <div class="input-group full">
-            <label data-t="labName">Produkt</label>
-            <input type="text" id="name" placeholder="...">
+        <div class="log-grid">
+            <div class="input-group full">
+                <label data-t="labName">Produkt</label>
+                <input type="text" id="name" placeholder="...">
+            </div>
+            <div class="input-group full">
+                <label data-t="labGrams">Gramm</label>
+                <input type="number" id="grams" value="100" oninput="if(value>10000)value=10000" onfocus="if(this.value=='100')this.value=''" onblur="if(this.value=='')this.value='100'">
+            </div>
+            <div class="input-group">
+                <label><span class="f-dot">●</span> <span data-t="labFat">Fett</span></label>
+                <input type="number" id="fat" value="0" oninput="if(value>100)value=100" onfocus="if(this.value=='0')this.value=''" onblur="if(this.value=='')this.value='0'">
+            </div>
+            <div class="input-group">
+                <label><span class="c-dot">●</span> <span data-t="labCarbs">Carbs</span></label>
+                <input type="number" id="carbs" value="0" oninput="if(value>100)value=100" onfocus="if(this.value=='0')this.value=''" onblur="if(this.value=='')this.value='0'">
+            </div>
+            <div class="input-group">
+                <label><span class="p-dot">●</span> <span data-t="labProtein">Eiweiß</span></label>
+                <input type="number" id="protein" value="0" oninput="if(value>100)value=100" onfocus="if(this.value=='0')this.value=''" onblur="if(this.value=='')this.value='0'">
+            </div>
+            <div class="input-group">
+                <label><span class="fi-dot">●</span> <span data-t="labFiber">Fiber</span></label>
+                <input type="number" id="fiber" value="0" oninput="if(value>100)value=100" onfocus="if(this.value=='0')this.value=''" onblur="if(this.value=='')this.value='0'">
+            </div>
         </div>
-        <div class="input-group full">
-            <label data-t="labGrams">Gramm</label>
-            <input type="number" id="grams" value="100" oninput="if(value>10000)value=10000" onfocus="if(this.value=='100')this.value=''" onblur="if(this.value=='')this.value='100'">
-        </div>
-        <div class="input-group">
-            <label><span class="f-dot">●</span> <span data-t="labFat">Fett</span></label>
-            <input type="number" id="fat" value="0" oninput="if(value>100)value=100" onfocus="if(this.value=='0')this.value=''" onblur="if(this.value=='')this.value='0'">
-        </div>
-        <div class="input-group">
-            <label><span class="c-dot">●</span> <span data-t="labCarbs">Carbs</span></label>
-            <input type="number" id="carbs" value="0" oninput="if(value>100)value=100" onfocus="if(this.value=='0')this.value=''" onblur="if(this.value=='')this.value='0'">
-        </div>
-        <div class="input-group">
-            <label><span class="p-dot">●</span> <span data-t="labProtein">Eiweiß</span></label>
-            <input type="number" id="protein" value="0" oninput="if(value>100)value=100" onfocus="if(this.value=='0')this.value=''" onblur="if(this.value=='')this.value='0'">
-        </div>
-        <div class="input-group">
-            <label><span class="fi-dot">●</span> <span data-t="labFiber">Fiber</span></label>
-            <input type="number" id="fiber" value="0" oninput="if(value>100)value=100" onfocus="if(this.value=='0')this.value=''" onblur="if(this.value=='')this.value='0'">
+        <div class="form-actions">
+            <button class="btn-clear" onclick="resetInputs(true)" data-t="btnClear">Leeren</button>
+            <button class="btn-add" onclick="addItem()" data-t="btnAdd">Hinzufügen</button>
         </div>
     </div>
 
@@ -186,9 +191,7 @@
             };
             if (!fullDatabase[dateKey]) fullDatabase[dateKey] = [];
             fullDatabase[dateKey].push(item);
-            saveToStorage(); 
-            loadDate(dateKey); 
-            resetInputs(false); // Kein Fokus-Sprung nach Add
+            saveToStorage(); loadDate(dateKey); resetInputs(false);
         }
     }
 
@@ -212,119 +215,47 @@
 
     function removeItem(dateKey, index) { 
         fullDatabase[dateKey].splice(index, 1); 
-        saveToStorage(); 
-        loadDate(dateKey); 
+        saveToStorage(); loadDate(dateKey); 
     }
 
     function updateDisplay() {
         const dateKey = document.getElementById('logDate').value;
         const items = fullDatabase[dateKey] || [];
-        const listDiv = document.getElementById('itemList'); 
-        listDiv.innerHTML = '';
+        const listDiv = document.getElementById('itemList'); listDiv.innerHTML = '';
         let tK = 0, tF = 0, tC = 0, tP = 0, tFi = 0;
-
         items.forEach((item, i) => {
             tK += item.kcal; tF += item.f; tC += item.c; tP += item.p; tFi += item.fib;
-            listDiv.innerHTML += `
-                <div class="list-item">
-                    <div>
-                        <strong>${item.name}</strong> (${item.weight}g)
-                        <div style="font-size:0.7rem">
-                            <span class="f-dot">F:${item.f.toFixed(1)}</span> 
-                            <span class="c-dot">C:${item.c.toFixed(1)}</span> 
-                            <span class="p-dot">P:${item.p.toFixed(1)}</span> 
-                            <span class="fi-dot">Fi:${item.fib.toFixed(1)}</span>
-                        </div>
-                    </div>
-                    <div style="display:flex; align-items:center;">
-                        <span style="font-weight:800;margin-right:8px">${Math.round(item.kcal)}</span>
-                        <button class="btn-icon" onclick="copyToTemplate('${dateKey}', ${i})">⚡</button>
-                        <button class="btn-icon" onclick="removeItem('${dateKey}', ${i})">✕</button>
-                    </div>
-                </div>`;
+            listDiv.innerHTML += `<div class="list-item"><div><strong>${item.name}</strong> (${item.weight}g)<div style="font-size:0.7rem"><span class="f-dot">F:${item.f.toFixed(1)}</span> <span class="c-dot">C:${item.c.toFixed(1)}</span> <span class="p-dot">P:${item.p.toFixed(1)}</span> <span class="fi-dot">Fi:${item.fib.toFixed(1)}</span></div></div><div style="display:flex; align-items:center;"><span style="font-weight:800;margin-right:8px">${Math.round(item.kcal)}</span><button class="btn-icon" onclick="copyToTemplate('${dateKey}', ${i})">⚡</button><button class="btn-icon" onclick="removeItem('${dateKey}', ${i})">✕</button></div></div>`;
         });
-
         document.getElementById('dailyTotal').innerText = Math.round(tK) + " kcal";
-        document.getElementById('sumF').innerText = Math.round(tF);
-        document.getElementById('sumC').innerText = Math.round(tC);
-        document.getElementById('sumP').innerText = Math.round(tP);
-        document.getElementById('sumFi').innerText = Math.round(tFi);
+        document.getElementById('sumF').innerText = Math.round(tF); document.getElementById('sumC').innerText = Math.round(tC); document.getElementById('sumP').innerText = Math.round(tP); document.getElementById('sumFi').innerText = Math.round(tFi);
     }
 
-    function getMonday(d) { 
-        d = new Date(d); 
-        let day = d.getDay(); 
-        let diff = d.getDate() - day + (day == 0 ? -6 : 1); 
-        return new Date(d.setDate(diff)).toISOString().split('T')[0]; 
-    }
+    function getMonday(d) { d = new Date(d); let day = d.getDay(); let diff = d.getDate() - day + (day == 0 ? -6 : 1); return new Date(d.setDate(diff)).toISOString().split('T')[0]; }
 
     function renderWeekly() {
-        const grid = document.getElementById('currentWeeklyGrid'); 
-        grid.innerHTML = '';
+        const grid = document.getElementById('currentWeeklyGrid'); grid.innerHTML = '';
         const selectedDate = document.getElementById('logDate').value;
         const t = translations[currentLang]; 
         let mondayDate = new Date(getMonday(selectedDate));
         const dateOpt = { day: '2-digit', month: 'short' };
-        
-        let sunDate = new Date(mondayDate); 
-        sunDate.setDate(sunDate.getDate() + 6);
+        let sunDate = new Date(mondayDate); sunDate.setDate(sunDate.getDate() + 6);
         document.getElementById('weekRangeDisplay').innerText = `${mondayDate.toLocaleDateString(currentLang, dateOpt)} — ${sunDate.toLocaleDateString(currentLang, dateOpt)}`;
-
         for (let i = 0; i < 7; i++) {
             const dStr = mondayDate.toISOString().split('T')[0];
             const items = fullDatabase[dStr] || [];
             let k = 0, f = 0, c = 0, p = 0, fi = 0;
             items.forEach(item => { k += item.kcal; f += item.f; c += item.c; p += item.p; fi += item.fib; });
-            
-            grid.innerHTML += `
-                <div class="day-box ${dStr === selectedDate ? 'active' : ''}" onclick="loadDate('${dStr}')">
-                    <span class="day-name">${t.days[i]}</span>
-                    <span class="day-date">${mondayDate.toLocaleDateString(currentLang, dateOpt)}</span>
-                    <div class="day-kcal">${Math.round(k)}</div>
-                    <div class="day-mini-macros">
-                        <span class="f-dot">${Math.round(f)}</span>
-                        <span class="c-dot">${Math.round(c)}</span>
-                        <span class="p-dot">${Math.round(p)}</span>
-                        <span class="fi-dot">${Math.round(fi)}</span>
-                    </div>
-                </div>`;
+            grid.innerHTML += `<div class="day-box ${dStr === selectedDate ? 'active' : ''}" onclick="loadDate('${dStr}')"><span class="day-name">${t.days[i]}</span><span class="day-date">${mondayDate.toLocaleDateString(currentLang, dateOpt)}</span><div class="day-kcal">${Math.round(k)}</div><div class="day-mini-macros"><span class="f-dot">${Math.round(f)}</span><span class="c-dot">${Math.round(c)}</span><span class="p-dot">${Math.round(p)}</span><span class="fi-dot">${Math.round(fi)}</span></div></div>`;
             mondayDate.setDate(mondayDate.getDate() + 1);
         }
     }
 
     function renderArchive() {
-        const arc = document.getElementById('archiveList'); 
-        arc.innerHTML = '';
-        const t = translations[currentLang]; 
-        const weeks = {};
-
-        Object.keys(fullDatabase).forEach(date => {
-            if (fullDatabase[date]?.length > 0) {
-                const mon = getMonday(date);
-                if (!weeks[mon]) weeks[mon] = { kcal: 0, f: 0, c: 0, p: 0, fi: 0 };
-                fullDatabase[date].forEach(item => { 
-                    weeks[mon].kcal += item.kcal; weeks[mon].f += item.f; 
-                    weeks[mon].c += item.c; weeks[mon].p += item.p; weeks[mon].fi += item.fib; 
-                });
-            }
-        });
-
-        Object.keys(weeks).sort().reverse().forEach(mon => {
-            const w = weeks[mon];
-            arc.innerHTML += `
-                <div class="week-block" onclick="loadDate('${mon}')">
-                    <div style="display:flex;justify-content:space-between">
-                        <strong>${t.weekStart} ${mon}</strong>
-                        <span style="color:var(--primary);font-weight:800">${Math.round(w.kcal)} kcal</span>
-                    </div>
-                    <div class="week-macros">
-                        <span class="f-dot">F:${Math.round(w.f)}</span> 
-                        <span class="c-dot">C:${Math.round(w.c)}</span> 
-                        <span class="p-dot">P:${Math.round(w.p)}</span> 
-                        <span class="fi-dot">Fi:${Math.round(w.fi)}</span>
-                    </div>
-                </div>`;
-        });
+        const arc = document.getElementById('archiveList'); arc.innerHTML = '';
+        const t = translations[currentLang]; const weeks = {};
+        Object.keys(fullDatabase).forEach(date => { if (fullDatabase[date]?.length > 0) { const mon = getMonday(date); if (!weeks[mon]) weeks[mon] = { kcal: 0, f: 0, c: 0, p: 0, fi: 0 }; fullDatabase[date].forEach(item => { weeks[mon].kcal += item.kcal; weeks[mon].f += item.f; weeks[mon].c += item.c; weeks[mon].p += item.p; weeks[mon].fi += item.fib; }); } });
+        Object.keys(weeks).sort().reverse().forEach(mon => { const w = weeks[mon]; arc.innerHTML += `<div class="week-block" onclick="loadDate('${mon}')"><div style="display:flex;justify-content:space-between"><strong>${t.weekStart} ${mon}</strong><span style="color:var(--primary);font-weight:800">${Math.round(w.kcal)} kcal</span></div><div class="week-macros"><span class="f-dot">F:${Math.round(w.f)}</span> <span class="c-dot">C:${Math.round(w.c)}</span> <span class="p-dot">P:${Math.round(w.p)}</span> <span class="fi-dot">Fi:${Math.round(w.fi)}</span></div></div>`; });
     }
 
     function saveToStorage() { localStorage.setItem('macroDB', JSON.stringify(fullDatabase)); }
@@ -332,16 +263,9 @@
 
     function exportCSV() {
         let csv = '\uFEFFDate;Name;Grams;Fat;Carbs;Protein;Fiber;Kcal\n';
-        Object.keys(fullDatabase).sort().forEach(date => {
-            fullDatabase[date].forEach(item => {
-                csv += `${date};${item.name};${item.weight};${item.f.toFixed(1)};${item.c.toFixed(1)};${item.p.toFixed(1)};${item.fib.toFixed(1)};${item.kcal.toFixed(0)}\n`;
-            });
-        });
+        Object.keys(fullDatabase).sort().forEach(date => { fullDatabase[date].forEach(item => { csv += `${date};${item.name};${item.weight};${item.f.toFixed(1)};${item.c.toFixed(1)};${item.p.toFixed(1)};${item.fib.toFixed(1)};${item.kcal.toFixed(0)}\n`; }); });
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = `Macro_Backup.csv`;
-        link.click();
+        const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = `Macro_Backup.csv`; link.click();
     }
 
     function importCSV(input) {
@@ -350,15 +274,10 @@
             const lines = e.target.result.split('\n');
             const newDB = {};
             lines.slice(1).forEach(line => {
-                const cols = line.split(';');
-                if (cols.length < 8) return;
+                const cols = line.split(';'); if (cols.length < 8) return;
                 const date = cols[0], weight = parseFloat(cols[2]), f = parseFloat(cols[3]), c = parseFloat(cols[4]), p = parseFloat(cols[5]), fi = parseFloat(cols[6]);
-                const item = { 
-                    name: cols[1], weight, f, c, p, fib: fi, kcal: parseFloat(cols[7]),
-                    orig: { f: (f/(weight/100)), c: (c/(weight/100)), p: (p/(weight/100)), fi: (fi/(weight/100)) } 
-                };
-                if (!newDB[date]) newDB[date] = [];
-                newDB[date].push(item);
+                const item = { name: cols[1], weight, f, c, p, fib: fi, kcal: parseFloat(cols[7]), orig: { f: (f/(weight/100)), c: (c/(weight/100)), p: (p/(weight/100)), fi: (fi/(weight/100)) } };
+                if (!newDB[date]) newDB[date] = []; newDB[date].push(item);
             });
             fullDatabase = newDB; saveToStorage(); location.reload();
         };
@@ -369,4 +288,3 @@
 </script>
 </body>
 </html>
-
