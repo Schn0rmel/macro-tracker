@@ -126,7 +126,7 @@
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
             <button class="tool-btn" onclick="exportCSV()">📤 Export</button>
             <button class="tool-btn" onclick="document.getElementById('csvImport').click()">📥 Import</button>
-            <input type="file" id="csvImport" style="display:none" accept=".csv" onchange="importCSV(this)">
+            <input type="file" id="csvImport" style="display:none" accept=".csv,text/csv,text/plain,application/csv,application/x-csv,text/comma-separated-values" onchange="importCSV(this)">
             <button class="tool-btn" style="color:red" onclick="clearAllData()">✕ Alles Löschen</button>
         </div>
     </div>
@@ -288,3 +288,4 @@
 </script>
 </body>
 </html>
+
