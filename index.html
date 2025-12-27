@@ -23,8 +23,13 @@
         .tool-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 20px; cursor: pointer; font-size: 0.75rem; font-weight: bold; }
         
         .card { background: var(--card); padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid var(--border); height: fit-content; }
-        h2 { margin-top: 0; color: var(--primary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 20px; }
+        h2 { margin-top: 0; color: var(--primary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 5px; }
+        .section-subtitle { font-size: 0.75rem; color: var(--muted); margin-bottom: 20px; display: block; font-weight: 600; }
         
+        /* Centered Week Display */
+        .week-display-center { text-align: center; background: var(--bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border); margin: 15px 0; }
+        .week-range-text { font-size: 1.1rem; font-weight: 800; color: var(--text); display: block; }
+
         .input-group { margin-bottom: 12px; }
         label { display: block; font-weight: 600; margin-bottom: 4px; font-size: 0.75rem; color: var(--muted); }
         input { width: 100%; padding: 10px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; }
@@ -41,15 +46,18 @@
         .action-btns { display: flex; gap: 5px; }
         .btn-icon { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px; border-radius: 6px; cursor: pointer; }
 
-        .weekly-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; margin-top: 10px; }
-        .day-box { background: var(--card); padding: 10px; border-radius: 8px; text-align: center; border: 1px solid var(--border); cursor: pointer; }
-        .day-box.active { border: 2px solid var(--primary); background: rgba(37, 99, 235, 0.05); }
-        .day-name { font-weight: bold; font-size: 0.7rem; color: var(--muted); display: block; margin-bottom: 4px; }
+        .weekly-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
+        .day-box { background: var(--card); padding: 12px 5px; border-radius: 8px; text-align: center; border: 1px solid var(--border); cursor: pointer; transition: 0.2s; }
+        .day-box:hover { border-color: var(--primary); }
+        .day-box.active { border: 2px solid var(--primary); background: rgba(37, 99, 235, 0.1); transform: translateY(-2px); }
+        .day-name { font-weight: bold; font-size: 0.75rem; color: var(--text); display: block; }
+        .day-date { font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 6px; }
         .day-kcal { font-weight: 800; color: var(--primary); font-size: 0.9rem; }
         .day-mini-macros { font-size: 0.65rem; display: flex; justify-content: center; gap: 3px; margin-top: 5px; font-weight: 600; }
 
         .full-width { grid-column: span 2; }
-        .week-block { background: var(--card); padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; display: flex; flex-direction: column; border: 1px solid var(--border); border-left: 5px solid var(--secondary); }
+        .week-block { background: var(--card); padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; display: flex; flex-direction: column; border: 1px solid var(--border); border-left: 5px solid var(--secondary); transition: 0.2s; }
+        .week-block:hover { transform: translateX(5px); background: var(--bg); }
         .week-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
         .week-macros { margin-top: 8px; display: flex; gap: 12px; font-size: 0.8rem; font-weight: bold; border-top: 1px solid var(--border); padding-top: 8px; }
         
@@ -57,7 +65,6 @@
         .total-kcal { font-size: 1.8rem; font-weight: 900; color: var(--text); }
         .macro-summary { font-weight: 700; font-size: 0.9rem; display: flex; justify-content: flex-end; gap: 15px; margin-top: 5px; }
 
-        /* Data Section */
         .data-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
         .btn-danger { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-size: 0.75rem; font-weight: bold; }
     </style>
@@ -78,6 +85,7 @@
 
     <div class="card">
         <h2 data-t="secLog">Log Entry</h2>
+        <span class="section-subtitle">Add new nutrients</span>
         <div class="input-group"><label data-t="labName">Product Name</label><input type="text" id="name" placeholder="..."></div>
         <div class="input-group"><label data-t="labGrams">Grams</label><input type="number" id="grams" value="100" onfocus="if(this.value=='100')this.value=''"></div>
         <div class="input-group"><label><span class="f-dot">●</span> <span data-t="labFat">Fat (per 100g)</span></label><input type="number" id="fat" value="0" onfocus="if(this.value=='0')this.value=''"></div>
@@ -92,6 +100,7 @@
 
     <div class="card">
         <h2 data-t="secSummary">Daily Summary</h2>
+        <span class="section-subtitle">Individual items for selected date</span>
         <div class="date-selector">
             <label style="margin:0" data-t="labFor">Log for:</label>
             <input type="date" id="logDate" onchange="loadDate(this.value)">
@@ -110,11 +119,15 @@
 
     <div class="card full-width">
         <h2 data-t="secWeek">Weekly View</h2>
+        <div class="week-display-center">
+            <span class="week-range-text" id="weekRangeDisplay">...</span>
+        </div>
         <div id="currentWeeklyGrid" class="weekly-grid"></div>
     </div>
 
     <div class="card full-width">
         <h2 data-t="secArchive">History Archive</h2>
+        <span class="section-subtitle">Past weekly performance</span>
         <div id="archiveList"></div>
     </div>
 
@@ -136,7 +149,7 @@
             labCarbs: "Carbs (per 100g)", labProtein: "Protein (per 100g)", labFiber: "Fiber (per 100g)",
             btnAdd: "Add to List", btnClear: "Clear Form", secSummary: "Daily Summary", labFor: "Log for:",
             secWeek: "Weekly View", secArchive: "History Archive", secData: "Data Management", 
-            btnClearAll: "Clear All Data", weekStart: "Week starting",
+            btnClearAll: "Clear All Data", weekStart: "Week starting", to: "to",
             days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], themeL: "☀️ LIGHT", themeD: "🌙 DARK",
             confirmClear: "Warning: This will permanently delete ALL entries. Continue?"
         },
@@ -145,7 +158,7 @@
             labCarbs: "Kohlenhydrate (pro 100g)", labProtein: "Eiweiß (pro 100g)", labFiber: "Ballaststoffe (pro 100g)",
             btnAdd: "Hinzufügen", btnClear: "Leeren", secSummary: "Tagesübersicht", labFor: "Datum:",
             secWeek: "Wochenansicht", secArchive: "Archiv", secData: "Datenverwaltung", 
-            btnClearAll: "Daten löschen", weekStart: "Woche ab",
+            btnClearAll: "Daten löschen", weekStart: "Woche ab", to: "bis",
             days: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'], themeL: "☀️ HELL", themeD: "🌙 DUNKEL",
             confirmClear: "Achtung: Dies wird ALLE Einträge unwiderruflich löschen. Fortfahren?"
         }
@@ -257,6 +270,7 @@
                 const date = cols[0];
                 const weight = parseFloat(cols[2]);
                 const f = parseFloat(cols[3]), c = parseFloat(cols[4]), p = parseFloat(cols[5]), fi = parseFloat(cols[6]);
+                if (isNaN(weight)) return;
                 const item = {
                     name: cols[1], weight, f, c, p, fib: fi, kcal: parseFloat(cols[7]),
                     orig: { f: (f/(weight/100)), c: (c/(weight/100)), p: (p/(weight/100)), fi: (fi/(weight/100)) }
@@ -293,14 +307,34 @@
     function renderWeekly() {
         const grid = document.getElementById('currentWeeklyGrid'); grid.innerHTML = '';
         const selectedDate = document.getElementById('logDate').value;
-        const t = translations[currentLang]; let curr = new Date(getMonday(selectedDate));
+        const t = translations[currentLang]; 
+        let mondayDate = new Date(getMonday(selectedDate));
+        
+        // Formatter for localized short dates (e.g., "27. Dec")
+        const dateOpt = { day: '2-digit', month: 'short' };
+        
+        let sunDate = new Date(mondayDate);
+        sunDate.setDate(sunDate.getDate() + 6);
+        document.getElementById('weekRangeDisplay').innerText = `${mondayDate.toLocaleDateString(currentLang, dateOpt)} — ${sunDate.toLocaleDateString(currentLang, dateOpt)}`;
+
         for (let i = 0; i < 7; i++) {
-            const dStr = curr.toISOString().split('T')[0];
+            const dStr = mondayDate.toISOString().split('T')[0];
             const items = fullDatabase[dStr] || [];
             let k = 0, f = 0, c = 0, p = 0;
             items.forEach(item => { k += item.kcal; f += item.f; c += item.c; p += item.p; });
-            grid.innerHTML += `<div class="day-box ${dStr === selectedDate ? 'active' : ''}" onclick="loadDate('${dStr}')"><span class="day-name">${t.days[i]}</span><div class="day-kcal">${Math.round(k)}</div><div class="day-mini-macros"><span class="f-dot">${Math.round(f)}</span><span class="c-dot">${Math.round(c)}</span><span class="p-dot">${Math.round(p)}</span></div></div>`;
-            curr.setDate(curr.getDate() + 1);
+            
+            grid.innerHTML += `
+                <div class="day-box ${dStr === selectedDate ? 'active' : ''}" onclick="loadDate('${dStr}')">
+                    <span class="day-name">${t.days[i]}</span>
+                    <span class="day-date">${mondayDate.toLocaleDateString(currentLang, dateOpt)}</span>
+                    <div class="day-kcal">${Math.round(k)}</div>
+                    <div class="day-mini-macros">
+                        <span class="f-dot">${Math.round(f)}</span>
+                        <span class="c-dot">${Math.round(c)}</span>
+                        <span class="p-dot">${Math.round(p)}</span>
+                    </div>
+                </div>`;
+            mondayDate.setDate(mondayDate.getDate() + 1);
         }
     }
 
