@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Macro Tracker Pro - Mobile Optimized</title>
+    <title>Macro Tracker Pro - Final</title>
     <style>
         :root { 
             --primary: #2563eb; --secondary: #7c3aed; --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
@@ -15,7 +15,6 @@
         }
         
         body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); margin: 10px; color: var(--text); transition: background 0.3s; line-height: 1.4; }
-        
         .container { max-width: 1200px; margin: auto; display: grid; grid-template-columns: 1fr; gap: 15px; }
         @media (min-width: 900px) { .container { grid-template-columns: 1fr 1.5fr; gap: 20px; margin: 20px auto; } .full-width { grid-column: span 2; } }
 
@@ -39,7 +38,7 @@
         .btn-clear { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 1; font-size: 0.85rem; }
         
         .total-kcal { font-size: clamp(1.4rem, 5vw, 1.8rem); font-weight: 900; color: var(--text); }
-        .macro-summary { font-weight: 700; font-size: clamp(0.7rem, 3vw, 0.9rem); display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px; }
+        .macro-summary { font-weight: 700; font-size: clamp(0.6rem, 2.8vw, 0.85rem); display: flex; justify-content: flex-end; gap: 8px; margin-top: 5px; }
         
         .weekly-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
         @media (min-width: 600px) { .weekly-grid { grid-template-columns: repeat(7, 1fr); } }
@@ -49,7 +48,7 @@
         .day-name { font-weight: bold; font-size: 0.65rem; display: block; }
         .day-date { font-size: 0.55rem; color: var(--muted); display: block; margin-bottom: 4px; }
         .day-kcal { font-weight: 800; color: var(--primary); font-size: 0.75rem; }
-        .day-mini-macros { font-size: 0.6rem; display: flex; justify-content: center; gap: 3px; font-weight: 600; }
+        .day-mini-macros { font-size: 0.55rem; display: flex; justify-content: center; gap: 2px; font-weight: 600; }
         
         .list-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); align-items: center; font-size: 0.85rem; }
         .item-macros { font-size: 0.7rem; font-weight: 600; margin-top: 3px; }
@@ -63,7 +62,7 @@
 
         .week-block { background: var(--card); padding: 12px; border-radius: 10px; margin-bottom: 8px; cursor: pointer; border: 1px solid var(--border); border-left: 5px solid var(--secondary); }
         .week-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
-        .week-macros { margin-top: 5px; display: flex; gap: 10px; font-size: 0.75rem; font-weight: bold; border-top: 1px solid var(--border); padding-top: 5px; }
+        .week-macros { margin-top: 5px; display: flex; gap: 8px; font-size: 0.7rem; font-weight: bold; border-top: 1px solid var(--border); padding-top: 5px; }
         
         .data-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
     </style>
@@ -84,14 +83,14 @@
 
     <div class="card">
         <h2 data-t="secLog">Eintrag</h2>
-        <span class="section-subtitle">Daten hinzufügen</span>
+        <span class="section-subtitle">Daten pro 100g eingeben</span>
         <div class="log-grid">
             <div class="input-group full"><label data-t="labName">Produkt</label><input type="text" id="name" placeholder="..."></div>
-            <div class="input-group full"><label data-t="labGrams">Gramm</label><input type="number" id="grams" value="100"></div>
-            <div class="input-group"><label><span class="f-dot">●</span> <span data-t="labFat">Fett</span></label><input type="number" id="fat" value="0"></div>
-            <div class="input-group"><label><span class="c-dot">●</span> <span data-t="labCarbs">Carbs</span></label><input type="number" id="carbs" value="0"></div>
-            <div class="input-group"><label><span class="p-dot">●</span> <span data-t="labProtein">Eiweiß</span></label><input type="number" id="protein" value="0"></div>
-            <div class="input-group"><label><span class="fi-dot">●</span> <span data-t="labFiber">Fiber</span></label><input type="number" id="fiber" value="0"></div>
+            <div class="input-group full"><label data-t="labGrams">Gramm (max. 10.000)</label><input type="number" id="grams" value="100" max="10000" onfocus="if(this.value=='100')this.value=''" onblur="if(this.value=='')this.value='100'"></div>
+            <div class="input-group"><label><span class="f-dot">●</span> <span data-t="labFat">Fett</span></label><input type="number" id="fat" value="0" max="100" onfocus="if(this.value=='0')this.value=''" onblur="if(this.value=='')this.value='0'"></div>
+            <div class="input-group"><label><span class="c-dot">●</span> <span data-t="labCarbs">Carbs</span></label><input type="number" id="carbs" value="0" max="100" onfocus="if(this.value=='0')this.value=''" onblur="if(this.value=='')this.value='0'"></div>
+            <div class="input-group"><label><span class="p-dot">●</span> <span data-t="labProtein">Eiweiß</span></label><input type="number" id="protein" value="0" max="100" onfocus="if(this.value=='0')this.value=''" onblur="if(this.value=='')this.value='0'"></div>
+            <div class="input-group"><label><span class="fi-dot">●</span> <span data-t="labFiber">Fiber</span></label><input type="number" id="fiber" value="0" max="100" onfocus="if(this.value=='0')this.value=''" onblur="if(this.value=='')this.value='0'"></div>
         </div>
         <div class="form-actions">
             <button class="btn-clear" onclick="resetInputs()" data-t="btnClear">Leeren</button>
@@ -111,6 +110,7 @@
                 <span class="f-dot">F:<span id="sumF">0</span></span>
                 <span class="c-dot">C:<span id="sumC">0</span></span>
                 <span class="p-dot">P:<span id="sumP">0</span></span>
+                <span class="fi-dot">Fi:<span id="sumFi">0</span></span>
             </div>
         </div>
     </div>
@@ -134,7 +134,7 @@
             <button class="tool-btn" onclick="exportCSV()">📤 Export</button>
             <button class="tool-btn" onclick="document.getElementById('csvImport').click()">📥 Import</button>
             <input type="file" id="csvImport" style="display:none" accept=".csv" onchange="importCSV(this)">
-            <button class="tool-btn" style="color:red" onclick="clearAllData()">✕ Löschen</button>
+            <button class="tool-btn" style="color:red" onclick="clearAllData()">✕ Alles Löschen</button>
         </div>
     </div>
 </div>
@@ -193,11 +193,11 @@
 
     function addItem() {
         const dateKey = document.getElementById('logDate').value;
-        const w = parseFloat(document.getElementById('grams').value) || 0;
-        const f100 = parseFloat(document.getElementById('fat').value) || 0;
-        const c100 = parseFloat(document.getElementById('carbs').value) || 0;
-        const p100 = parseFloat(document.getElementById('protein').value) || 0;
-        const fi100 = parseFloat(document.getElementById('fiber').value) || 0;
+        const w = Math.min(parseFloat(document.getElementById('grams').value) || 0, 10000);
+        const f100 = Math.min(parseFloat(document.getElementById('fat').value) || 0, 100);
+        const c100 = Math.min(parseFloat(document.getElementById('carbs').value) || 0, 100);
+        const p100 = Math.min(parseFloat(document.getElementById('protein').value) || 0, 100);
+        const fi100 = Math.min(parseFloat(document.getElementById('fiber').value) || 0, 100);
         const mult = w / 100;
 
         if (w > 0) {
@@ -209,7 +209,7 @@
             };
             if (!fullDatabase[dateKey]) fullDatabase[dateKey] = [];
             fullDatabase[dateKey].push(item);
-            saveToStorage(); loadDate(dateKey); resetInputs();
+            saveToStorage(); loadDate(dateKey); resetInputs(false);
         }
     }
 
@@ -245,7 +245,7 @@
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.download = `Macros_${new Date().toISOString().split('T')[0]}.csv`;
+        link.download = `Macros_Backup.csv`;
         link.click();
     }
 
@@ -280,10 +280,11 @@
         let tK = 0, tF = 0, tC = 0, tP = 0, tFi = 0;
         items.forEach((item, i) => {
             tK += item.kcal; tF += item.f; tC += item.c; tP += item.p; tFi += item.fib;
-            listDiv.innerHTML += `<div class="list-item"><div><div style="font-weight:700">${item.name} (${item.weight}g)</div><div class="item-macros"><span class="f-dot">F:${item.f.toFixed(1)}</span> · <span class="c-dot">C:${item.c.toFixed(1)}</span> · <span class="p-dot">P:${item.p.toFixed(1)}</span></div></div><div class="action-btns"><span style="font-weight:800; margin-right:10px">${Math.round(item.kcal)}</span><button class="btn-icon" onclick="copyToTemplate('${dateKey}', ${i})">⚡</button><button class="btn-icon" onclick="removeItem('${dateKey}', ${i})">✕</button></div></div>`;
+            listDiv.innerHTML += `<div class="list-item"><div><div style="font-weight:700">${item.name} (${item.weight}g)</div><div class="item-macros"><span class="f-dot">F:${item.f.toFixed(1)}</span> · <span class="c-dot">C:${item.c.toFixed(1)}</span> · <span class="p-dot">P:${item.p.toFixed(1)}</span> · <span class="fi-dot">Fi:${item.fib.toFixed(1)}</span></div></div><div class="action-btns"><span style="font-weight:800; margin-right:10px">${Math.round(item.kcal)}</span><button class="btn-icon" onclick="copyToTemplate('${dateKey}', ${i})">⚡</button><button class="btn-icon" onclick="removeItem('${dateKey}', ${i})">✕</button></div></div>`;
         });
         document.getElementById('dailyTotal').innerText = Math.round(tK) + " kcal";
-        document.getElementById('sumF').innerText = Math.round(tF); document.getElementById('sumC').innerText = Math.round(tC); document.getElementById('sumP').innerText = Math.round(tP);
+        document.getElementById('sumF').innerText = Math.round(tF); document.getElementById('sumC').innerText = Math.round(tC); 
+        document.getElementById('sumP').innerText = Math.round(tP); document.getElementById('sumFi').innerText = Math.round(tFi);
     }
 
     function getMonday(d) {
@@ -303,9 +304,9 @@
         for (let i = 0; i < 7; i++) {
             const dStr = mondayDate.toISOString().split('T')[0];
             const items = fullDatabase[dStr] || [];
-            let k = 0, f = 0, c = 0, p = 0;
-            items.forEach(item => { k += item.kcal; f += item.f; c += item.c; p += item.p; });
-            grid.innerHTML += `<div class="day-box ${dStr === selectedDate ? 'active' : ''}" onclick="loadDate('${dStr}')"><span class="day-name">${t.days[i]}</span><span class="day-date">${mondayDate.toLocaleDateString(currentLang, dateOpt)}</span><div class="day-kcal">${Math.round(k)}</div><div class="day-mini-macros"><span class="f-dot">${Math.round(f)}</span><span class="c-dot">${Math.round(c)}</span><span class="p-dot">${Math.round(p)}</span></div></div>`;
+            let k = 0, f = 0, c = 0, p = 0, fi = 0;
+            items.forEach(item => { k += item.kcal; f += item.f; c += item.c; p += item.p; fi += item.fib; });
+            grid.innerHTML += `<div class="day-box ${dStr === selectedDate ? 'active' : ''}" onclick="loadDate('${dStr}')"><span class="day-name">${t.days[i]}</span><span class="day-date">${mondayDate.toLocaleDateString(currentLang, dateOpt)}</span><div class="day-kcal">${Math.round(k)}</div><div class="day-mini-macros"><span class="f-dot">${Math.round(f)}</span><span class="c-dot">${Math.round(c)}</span><span class="p-dot">${Math.round(p)}</span><span class="fi-dot">${Math.round(fi)}</span></div></div>`;
             mondayDate.setDate(mondayDate.getDate() + 1);
         }
     }
@@ -316,20 +317,21 @@
         Object.keys(fullDatabase).forEach(date => {
             if (fullDatabase[date]?.length > 0) {
                 const mon = getMonday(date);
-                if (!weeks[mon]) weeks[mon] = { kcal: 0, f: 0, c: 0, p: 0 };
-                fullDatabase[date].forEach(item => { weeks[mon].kcal += item.kcal; weeks[mon].f += item.f; weeks[mon].c += item.c; weeks[mon].p += item.p; });
+                if (!weeks[mon]) weeks[mon] = { kcal: 0, f: 0, c: 0, p: 0, fi: 0 };
+                fullDatabase[date].forEach(item => { weeks[mon].kcal += item.kcal; weeks[mon].f += item.f; weeks[mon].c += item.c; weeks[mon].p += item.p; weeks[mon].fi += item.fib; });
             }
         });
         Object.keys(weeks).sort().reverse().forEach(mon => {
             const w = weeks[mon];
-            arc.innerHTML += `<div class="week-block" onclick="loadDate('${mon}')"><div class="week-header"><strong>${t.weekStart} ${mon}</strong><div style="color:var(--primary); font-weight:800;">${Math.round(w.kcal)} kcal</div></div><div class="week-macros"><span class="f-dot">F: ${Math.round(w.f)}</span><span class="c-dot">C: ${Math.round(w.c)}</span><span class="p-dot">P: ${Math.round(w.p)}</span></div></div>`;
+            arc.innerHTML += `<div class="week-block" onclick="loadDate('${mon}')"><div class="week-header"><strong>${t.weekStart} ${mon}</strong><div style="color:var(--primary); font-weight:800;">${Math.round(w.kcal)} kcal</div></div><div class="week-macros"><span class="f-dot">F: ${Math.round(w.f)}</span><span class="c-dot">C: ${Math.round(w.c)}</span><span class="p-dot">P: ${Math.round(w.p)}</span><span class="fi-dot">Fi: ${Math.round(w.fi)}</span></div></div>`;
         });
     }
 
-    function resetInputs() {
-        document.getElementById('name').value = ''; document.getElementById('grams').value = 100;
+    function resetInputs(shouldFocus = true) {
+        document.getElementById('name').value = ''; 
+        document.getElementById('grams').value = 100;
         ['fat', 'carbs', 'protein', 'fiber'].forEach(id => document.getElementById(id).value = 0);
-        document.getElementById('name').focus();
+        if(shouldFocus) document.getElementById('name').focus();
     }
 
     init();
