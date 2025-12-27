@@ -45,6 +45,14 @@
         .week-block { background: var(--card); padding: 12px; border-radius: 10px; margin-bottom: 8px; border: 1px solid var(--border); border-left: 5px solid var(--secondary); cursor: pointer; }
         .week-macros { margin-top: 5px; display: flex; gap: 8px; font-size: 0.7rem; font-weight: bold; border-top: 1px solid var(--border); padding-top: 5px; }
         .btn-icon { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px; border-radius: 6px; cursor: pointer; margin-left: 4px; }
+        
+        /* Modal Styles */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); overflow-y: auto; }
+        .modal-content { background: var(--card); margin: 5% auto; padding: 20px; width: 90%; max-width: 600px; border-radius: 15px; border: 1px solid var(--border); position: relative; color: var(--text); }
+        .close-modal { position: absolute; right: 15px; top: 15px; font-size: 24px; cursor: pointer; color: var(--muted); }
+        .help-section { margin-bottom: 20px; }
+        .help-section h3 { font-size: 0.9rem; color: var(--primary); margin-bottom: 8px; }
+        .help-section p { font-size: 0.85rem; margin-bottom: 8px; }
     </style>
 </head>
 <body>
@@ -53,6 +61,7 @@
     <div class="header">
         <h1 style="font-size: 1rem; margin: 0;">MACRO <span style="color: var(--primary);">PRO</span></h1>
         <div class="toolbar">
+            <button class="tool-btn" onclick="openModal()">ⓘ INFO</button>
             <select class="tool-select" id="langSelector" onchange="changeLanguage(this.value)">
                 <option value="en">🇺🇸 EN</option>
                 <option value="de">🇩🇪 DE</option>
@@ -61,13 +70,20 @@
         </div>
     </div>
 
+    <div id="helpModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="helpTitle">Anleitung / Manual</h2>
+            <div id="helpContent" style="margin-top: 15px;">
+                </div>
+            <button class="btn-add" style="margin-top: 15px; width: 100%;" onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
     <div class="card">
         <h2 data-t="secLog">Eintrag</h2>
         <div class="log-grid">
-            <div class="input-group full">
-                <label data-t="labName">Produkt</label>
-                <input type="text" id="name" placeholder="...">
-            </div>
+            <div class="input-group full"><label data-t="labName">Produkt</label><input type="text" id="name" placeholder="..."></div>
             <div class="input-group full">
                 <label data-t="labGrams">Gramm</label>
                 <input type="number" id="grams" value="100" oninput="if(value>10000)value=10000" onfocus="if(this.value=='100')this.value=''" onblur="if(this.value=='')this.value='100'">
@@ -133,9 +149,34 @@
 </div>
 
 <script>
-    const translations = {
-        en: { secLog: "Log Entry", labName: "Name", labGrams: "Grams", labFat: "Fat", labCarbs: "Carbs", labProtein: "Protein", labFiber: "Fiber", btnAdd: "Add", btnClear: "Clear", secSummary: "Summary", secWeek: "Weekly View", secArchive: "Archive", secData: "Data", weekStart: "Week of", days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] },
-        de: { secLog: "Eintrag", labName: "Produkt", labGrams: "Gramm", labFat: "Fett", labCarbs: "Carbs", labProtein: "Eiweiß", labFiber: "Fiber", btnAdd: "Hinzufügen", btnClear: "Leeren", secSummary: "Übersicht", secWeek: "Wochenansicht", secArchive: "Archiv", secData: "Daten", weekStart: "Woche ab", days: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'] }
+const translations = {
+        en: { 
+            secLog: "Log Entry", labName: "Name", labGrams: "Grams", labFat: "Fat", labCarbs: "Carbs", labProtein: "Protein", labFiber: "Fiber", btnAdd: "Add", btnClear: "Clear", secSummary: "Summary", secWeek: "Weekly View", secArchive: "Archive", secData: "Data", weekStart: "Week of", days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            help: `
+                <div class="help-section">
+                    <h3>How to log?</h3>
+                    <p>Start by entering the food item (e.g., "Egg"). An average egg weighs about 55g. Enter 55 in the grams field, then Fat: 11, Carbs: 1, Protein: 13, Fiber: 0. Calories are calculated automatically.</p>
+                    <p><strong>Important (Labels):</strong> When using data from a product label, <b>always enter the values for 100g</b> into the macro fields. You define the actual portion size independently in the "Grams" field. For example: If you eat 50g of a chocolate bar, enter 50 in grams and the 100g-values from the label for Fat, Carbs, etc.</p>
+                    <p><strong>Color Code:</strong> Fat (<span class="f-dot">yellow</span>), Carbs (<span class="c-dot">blue</span>), Protein (<span class="p-dot">red</span>), Fiber (<span class="fi-dot">green</span>).</p>
+                    <p><strong>Functions:</strong> "Add" saves the entry. Use "X" to delete or "⚡" to copy as a template – perfect if you eat the same product later in a different amount.</p>
+                    <p><strong>History:</strong> Click any day in the weekly view or archive to edit or add items to that specific date.</p>
+                    <p><strong>Data:</strong> Use Export for CSV backups. Import overwrites current data. "Clear All" resets everything. All data is stored locally on your device.</p>
+                </div>`
+        },
+        de: { 
+            secLog: "Eintrag", labName: "Produkt", labGrams: "Gramm", labFat: "Fett", labCarbs: "Carbs", labProtein: "Eiweiß", labFiber: "Fiber", btnAdd: "Hinzufügen", btnClear: "Leeren", secSummary: "Übersicht", secWeek: "Wochenansicht", secArchive: "Archiv", secData: "Daten", weekStart: "Woche ab", days: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
+            help: `
+                <div class="help-section">
+                    <h3>Wie trage ich ein?</h3>
+                    <p>Beginne mit der Speise, z.B. „Ei“. Ein Durchschnittsei hat ca. 55g. Tippe 55 ein, dann Fett: 11, Kohlenhydrate: 1, Protein: 13, Ballaststoffe: 0. Kalorien werden automatisch berechnet.</p>
+                    <p><strong>Wichtig (Labels):</strong> Wenn du Werte von einer Verpackung abtippst, achte darauf, <b>immer die 100g-Angaben</b> für die Makros zu übernehmen. Die tatsächliche Menge, die du gegessen hast, definierst du eigenständig im Feld "Gramm".</p>
+                    <p><strong>Beispiel:</strong> Du isst 50g einer Schokolade. Tippe 50 bei Gramm ein, aber nutze die Nährwerte, die auf der Packung für 100g stehen (z.B. Fett 39, KH 53, Protein 6).</p>
+                    <p><strong>Farben:</strong> Fett (<span class="f-dot">gelb</span>), KH (<span class="c-dot">blau</span>), Protein (<span class="p-dot">rot</span>), Ballaststoffe (<span class="fi-dot">grün</span>).</p>
+                    <p><strong>Funktionen:</strong> „Hinzufügen“ speichert den Eintrag. Mit „X“ löschst du ihn. Das Symbol „⚡“ kopiert den Eintrag als Vorlage – ideal, wenn du später am Tag nochmal eine andere Menge des gleichen Produkts isst.</p>
+                    <p><strong>Vergangenheit/Zukunft:</strong> Klicke in der Wochenansicht oder im Archiv auf einen Tag, um dort Einträge zu ändern oder hinzuzufügen.</p>
+                    <p><strong>Daten:</strong> Exportiere regelmäßig eine CSV zur Sicherung. Import überschreibt alle aktuellen Daten. „Alles löschen“ leert den Speicher komplett. Deine Daten bleiben lokal auf deinem Gerät.</p>
+                </div>`
+        }
     };
 
     let currentLang = localStorage.getItem('lang') || (navigator.language.startsWith('de') ? 'de' : 'en');
@@ -158,6 +199,19 @@
     function toggleDarkMode() { 
         document.body.classList.toggle('dark'); 
         localStorage.setItem('darkMode', document.body.classList.contains('dark') ? 'enabled' : 'disabled'); 
+    }
+
+    function openModal() {
+        document.getElementById('helpContent').innerHTML = translations[currentLang].help;
+        document.getElementById('helpModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('helpModal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById('helpModal')) closeModal();
     }
 
     function loadDate(dateKey) { 
@@ -225,7 +279,7 @@
         let tK = 0, tF = 0, tC = 0, tP = 0, tFi = 0;
         items.forEach((item, i) => {
             tK += item.kcal; tF += item.f; tC += item.c; tP += item.p; tFi += item.fib;
-            listDiv.innerHTML += `<div class="list-item"><div><strong>${item.name}</strong> (${item.weight}g)<div style="font-size:0.7rem"><span class="f-dot">F:${item.f.toFixed(1)}</span> <span class="c-dot">C:${item.c.toFixed(1)}</span> <span class="p-dot">P:${item.p.toFixed(1)}</span> <span class="fi-dot">Fi:${item.fib.toFixed(1)}</span></div></div><div style="display:flex; align-items:center;"><span style="font-weight:800;margin-right:8px">${Math.round(item.kcal)}</span><button class="btn-icon" onclick="copyToTemplate('${dateKey}', ${i})">⚡</button><button class="btn-icon" onclick="removeItem('${dateKey}', ${i})">✕</button></div></div>`;
+            listDiv.innerHTML += `<div class="list-item"><div><strong>${item.name}</strong> (${item.weight}g)<div style="font-size:0.7rem"><span class="f-dot">F:${item.f.toFixed(1)}</span> <span class="c-dot">C:${item.c.toFixed(1)}</span> <span class="p-dot">P:${item.p.toFixed(1)}</span> <span class="fi-dot">Fi:${item.fib.toFixed(1)}</span></div></div><div style="display:flex; align-items:center;"><span style="font-weight:800;margin-right:8px">${Math.round(item.kcal)}</span><button class="btn-icon" title="Vorlage" onclick="copyToTemplate('${dateKey}', ${i})">⚡</button><button class="btn-icon" title="Löschen" onclick="removeItem('${dateKey}', ${i})">✕</button></div></div>`;
         });
         document.getElementById('dailyTotal').innerText = Math.round(tK) + " kcal";
         document.getElementById('sumF').innerText = Math.round(tF); document.getElementById('sumC').innerText = Math.round(tC); document.getElementById('sumP').innerText = Math.round(tP); document.getElementById('sumFi').innerText = Math.round(tFi);
@@ -288,4 +342,3 @@
 </script>
 </body>
 </html>
-
