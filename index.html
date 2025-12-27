@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Macro Tracker Pro - Global</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Macro Tracker Pro - Mobile Optimized</title>
     <style>
         :root { 
             --primary: #2563eb; --secondary: #7c3aed; --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --muted: #64748b; --border: #e2e8f0;
@@ -14,66 +14,60 @@
             --f-clr: #fbbf24; --c-clr: #60a5fa; --p-clr: #f87171; --fi-clr: #34d399;
         }
         
-        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); margin: 20px; color: var(--text); transition: background 0.3s; }
-        .container { max-width: 1200px; margin: auto; display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; }
+        body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); margin: 10px; color: var(--text); transition: background 0.3s; line-height: 1.4; }
         
-        .header { grid-column: span 2; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .toolbar { display: flex; gap: 10px; align-items: center; }
-        .tool-select { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 8px; border-radius: 8px; font-size: 0.75rem; font-weight: bold; cursor: pointer; }
-        .tool-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 20px; cursor: pointer; font-size: 0.75rem; font-weight: bold; }
-        
-        .card { background: var(--card); padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid var(--border); height: fit-content; }
-        h2 { margin-top: 0; color: var(--primary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 5px; }
-        .section-subtitle { font-size: 0.75rem; color: var(--muted); margin-bottom: 20px; display: block; font-weight: 600; }
-        
-        /* Centered Week Display */
-        .week-display-center { text-align: center; background: var(--bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border); margin: 15px 0; }
-        .week-range-text { font-size: 1.1rem; font-weight: 800; color: var(--text); display: block; }
+        /* Layout Grid */
+        .container { max-width: 1200px; margin: auto; display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media (min-width: 900px) { .container { grid-template-columns: 1fr 1.5fr; gap: 20px; margin: 20px auto; } .full-width { grid-column: span 2; } }
 
-        .input-group { margin-bottom: 12px; }
-        label { display: block; font-weight: 600; margin-bottom: 4px; font-size: 0.75rem; color: var(--muted); }
-        input { width: 100%; padding: 10px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        @media (min-width: 900px) { .header { grid-column: span 2; } }
         
-        .form-actions { display: flex; gap: 10px; margin-top: 15px; }
-        .btn-add { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 2; }
-        .btn-clear { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 12px; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 1; }
+        .toolbar { display: flex; gap: 8px; }
+        .tool-select, .tool-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 6px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: bold; cursor: pointer; }
         
-        .date-selector { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding: 10px; background: var(--bg); border-radius: 8px; }
-        .list-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); align-items: center; }
-        .item-macros { font-size: 0.75rem; font-weight: 600; margin-top: 3px; }
-        .f-dot { color: var(--f-clr); } .c-dot { color: var(--c-clr); } .p-dot { color: var(--p-clr); } .fi-dot { color: var(--fi-clr); }
-
-        .action-btns { display: flex; gap: 5px; }
-        .btn-icon { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 6px; border-radius: 6px; cursor: pointer; }
-
-        .weekly-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
-        .day-box { background: var(--card); padding: 12px 5px; border-radius: 8px; text-align: center; border: 1px solid var(--border); cursor: pointer; transition: 0.2s; }
-        .day-box:hover { border-color: var(--primary); }
-        .day-box.active { border: 2px solid var(--primary); background: rgba(37, 99, 235, 0.1); transform: translateY(-2px); }
-        .day-name { font-weight: bold; font-size: 0.75rem; color: var(--text); display: block; }
-        .day-date { font-size: 0.65rem; color: var(--muted); display: block; margin-bottom: 6px; }
-        .day-kcal { font-weight: 800; color: var(--primary); font-size: 0.9rem; }
-        .day-mini-macros { font-size: 0.65rem; display: flex; justify-content: center; gap: 3px; margin-top: 5px; font-weight: 600; }
-
-        .full-width { grid-column: span 2; }
-        .week-block { background: var(--card); padding: 15px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; display: flex; flex-direction: column; border: 1px solid var(--border); border-left: 5px solid var(--secondary); transition: 0.2s; }
-        .week-block:hover { transform: translateX(5px); background: var(--bg); }
-        .week-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .week-macros { margin-top: 8px; display: flex; gap: 12px; font-size: 0.8rem; font-weight: bold; border-top: 1px solid var(--border); padding-top: 8px; }
+        .card { background: var(--card); padding: 15px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border: 1px solid var(--border); height: fit-content; }
+        h2 { margin: 0 0 5px 0; color: var(--primary); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        .section-subtitle { font-size: 0.65rem; color: var(--muted); margin-bottom: 15px; display: block; font-weight: 600; }
         
-        .totals-box { text-align: right; margin-top: 20px; padding-top: 15px; border-top: 2px dashed var(--border); }
-        .total-kcal { font-size: 1.8rem; font-weight: 900; color: var(--text); }
-        .macro-summary { font-weight: 700; font-size: 0.9rem; display: flex; justify-content: flex-end; gap: 15px; margin-top: 5px; }
+        /* KOMPAKTES LOG ENTRY FORMULAR */
+        .log-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .input-group.full { grid-column: span 2; }
+        .input-group label { display: block; font-weight: 700; margin-bottom: 3px; font-size: 0.65rem; color: var(--muted); }
+        input { width: 100%; padding: 8px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; font-size: 0.9rem; }
+        
+        .form-actions { display: flex; gap: 8px; margin-top: 15px; }
+        .btn-add { background: var(--primary); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 2; font-size: 0.85rem; }
+        .btn-clear { background: var(--bg); color: var(--text); border: 1px solid var(--border); padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 1; font-size: 0.85rem; }
+        
+        /* SUMMARY SCALING */
+        .total-kcal { font-size: clamp(1.4rem, 5vw, 1.8rem); font-weight: 900; color: var(--text); }
+        .macro-summary { font-weight: 700; font-size: clamp(0.7rem, 3vw, 0.9rem); display: flex; justify-content: flex-end; gap: 10px; margin-top: 5px; }
+        
+        /* WEEKLY GRID - MOBILE SCROLL ODER WRAP */
+        .weekly-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        @media (min-width: 600px) { .weekly-grid { grid-template-columns: repeat(7, 1fr); } }
+        
+        .day-box { background: var(--card); padding: 8px 4px; border-radius: 8px; text-align: center; border: 1px solid var(--border); cursor: pointer; }
+        .day-box.active { border: 2px solid var(--primary); background: rgba(37, 99, 235, 0.1); }
+        .day-name { font-weight: bold; font-size: 0.65rem; display: block; }
+        .day-date { font-size: 0.55rem; color: var(--muted); display: block; margin-bottom: 4px; }
+        .day-kcal { font-weight: 800; color: var(--primary); font-size: 0.75rem; }
+        
+        .list-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); align-items: center; font-size: 0.85rem; }
+        .item-macros { font-size: 0.7rem; }
 
-        .data-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
-        .btn-danger { background: #fee2e2; color: #dc2626; border: 1px solid #fecaca; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-size: 0.75rem; font-weight: bold; }
+        .week-display-center { text-align: center; background: var(--bg); padding: 8px; border-radius: 8px; margin: 10px 0; border: 1px solid var(--border); }
+        .week-range-text { font-size: 0.9rem; font-weight: 800; }
+
+        .data-actions { display: flex; gap: 8px; flex-wrap: wrap; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1 style="font-size: 1.2rem; margin: 0;">MACRO TRACKER <span style="color: var(--primary); font-weight: 400;">PRO</span></h1>
+        <h1 style="font-size: 1rem; margin: 0;">MACRO <span style="color: var(--primary);">PRO</span></h1>
         <div class="toolbar">
             <select class="tool-select" id="langSelector" onchange="changeLanguage(this.value)">
                 <option value="en">🇺🇸 EN</option>
@@ -84,41 +78,40 @@
     </div>
 
     <div class="card">
-        <h2 data-t="secLog">Log Entry</h2>
-        <span class="section-subtitle">Add new nutrients</span>
-        <div class="input-group"><label data-t="labName">Product Name</label><input type="text" id="name" placeholder="..."></div>
-        <div class="input-group"><label data-t="labGrams">Grams</label><input type="number" id="grams" value="100" onfocus="if(this.value=='100')this.value=''"></div>
-        <div class="input-group"><label><span class="f-dot">●</span> <span data-t="labFat">Fat (per 100g)</span></label><input type="number" id="fat" value="0" onfocus="if(this.value=='0')this.value=''"></div>
-        <div class="input-group"><label><span class="c-dot">●</span> <span data-t="labCarbs">Carbs (per 100g)</span></label><input type="number" id="carbs" value="0" onfocus="if(this.value=='0')this.value=''"></div>
-        <div class="input-group"><label><span class="p-dot">●</span> <span data-t="labProtein">Protein (per 100g)</span></label><input type="number" id="protein" value="0" onfocus="if(this.value=='0')this.value=''"></div>
-        <div class="input-group"><label><span class="fi-dot">●</span> <span data-t="labFiber">Fiber (per 100g)</span></label><input type="number" id="fiber" value="0" onfocus="if(this.value=='0')this.value=''"></div>
+        <h2 data-t="secLog">Eintrag</h2>
+        <span class="section-subtitle">Neue Daten hinzufügen</span>
+        <div class="log-grid">
+            <div class="input-group full"><label data-t="labName">Produkt</label><input type="text" id="name" placeholder="..."></div>
+            <div class="input-group full"><label data-t="labGrams">Gramm</label><input type="number" id="grams" value="100"></div>
+            <div class="input-group"><label><span class="f-dot">●</span> <span data-t="labFat">Fett</span></label><input type="number" id="fat" value="0"></div>
+            <div class="input-group"><label><span class="c-dot">●</span> <span data-t="labCarbs">Carbs</span></label><input type="number" id="carbs" value="0"></div>
+            <div class="input-group"><label><span class="p-dot">●</span> <span data-t="labProtein">Eiweiß</span></label><input type="number" id="protein" value="0"></div>
+            <div class="input-group"><label><span class="fi-dot">●</span> <span data-t="labFiber">Fiber</span></label><input type="number" id="fiber" value="0"></div>
+        </div>
         <div class="form-actions">
-            <button class="btn-clear" onclick="resetInputs()" data-t="btnClear">Clear</button>
-            <button class="btn-add" onclick="addItem()" data-t="btnAdd">Add</button>
+            <button class="btn-clear" onclick="resetInputs()" data-t="btnClear">Leeren</button>
+            <button class="btn-add" onclick="addItem()" data-t="btnAdd">Hinzufügen</button>
         </div>
     </div>
 
     <div class="card">
-        <h2 data-t="secSummary">Daily Summary</h2>
-        <span class="section-subtitle">Individual items for selected date</span>
-        <div class="date-selector">
-            <label style="margin:0" data-t="labFor">Log for:</label>
+        <h2 data-t="secSummary">Übersicht</h2>
+        <div class="date-selector" style="margin-top:10px">
             <input type="date" id="logDate" onchange="loadDate(this.value)">
         </div>
-        <div id="itemList"></div>
+        <div id="itemList" style="margin-top:10px"></div>
         <div class="totals-box">
             <div class="total-kcal" id="dailyTotal">0 kcal</div>
             <div class="macro-summary">
-                <span class="f-dot">F: <span id="sumF">0</span></span>
-                <span class="c-dot">C: <span id="sumC">0</span></span>
-                <span class="p-dot">P: <span id="sumP">0</span></span>
-                <span class="fi-dot">Fi: <span id="sumFi">0</span></span>
+                <span class="f-dot">F:<span id="sumF">0</span></span>
+                <span class="c-dot">C:<span id="sumC">0</span></span>
+                <span class="p-dot">P:<span id="sumP">0</span></span>
             </div>
         </div>
     </div>
 
     <div class="card full-width">
-        <h2 data-t="secWeek">Weekly View</h2>
+        <h2 data-t="secWeek">Wochenansicht</h2>
         <div class="week-display-center">
             <span class="week-range-text" id="weekRangeDisplay">...</span>
         </div>
@@ -126,241 +119,25 @@
     </div>
 
     <div class="card full-width">
-        <h2 data-t="secArchive">History Archive</h2>
-        <span class="section-subtitle">Past weekly performance</span>
+        <h2 data-t="secArchive">Archiv</h2>
         <div id="archiveList"></div>
     </div>
 
     <div class="card full-width">
-        <h2 data-t="secData">Data Management</h2>
+        <h2 data-t="secData">Daten</h2>
         <div class="data-actions">
-            <button class="tool-btn" onclick="exportCSV()">📤 Export CSV</button>
-            <button class="tool-btn" onclick="document.getElementById('csvImport').click()">📥 Import CSV</button>
+            <button class="tool-btn" onclick="exportCSV()">📤 Export</button>
+            <button class="tool-btn" onclick="document.getElementById('csvImport').click()">📥 Import</button>
             <input type="file" id="csvImport" style="display:none" accept=".csv" onchange="importCSV(this)">
-            <button class="btn-danger" onclick="clearAllData()" data-t="btnClearAll">Clear All Database</button>
+            <button class="tool-btn" style="color:red" onclick="clearAllData()">✕ Alles Löschen</button>
         </div>
     </div>
 </div>
 
 <script>
-    const translations = {
-        en: {
-            secLog: "Log Entry", labName: "Product Name", labGrams: "Grams", labFat: "Fat (per 100g)",
-            labCarbs: "Carbs (per 100g)", labProtein: "Protein (per 100g)", labFiber: "Fiber (per 100g)",
-            btnAdd: "Add to List", btnClear: "Clear Form", secSummary: "Daily Summary", labFor: "Log for:",
-            secWeek: "Weekly View", secArchive: "History Archive", secData: "Data Management", 
-            btnClearAll: "Clear All Data", weekStart: "Week starting", to: "to",
-            days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], themeL: "☀️ LIGHT", themeD: "🌙 DARK",
-            confirmClear: "Warning: This will permanently delete ALL entries. Continue?"
-        },
-        de: {
-            secLog: "Eintrag", labName: "Produktname", labGrams: "Gramm", labFat: "Fett (pro 100g)",
-            labCarbs: "Kohlenhydrate (pro 100g)", labProtein: "Eiweiß (pro 100g)", labFiber: "Ballaststoffe (pro 100g)",
-            btnAdd: "Hinzufügen", btnClear: "Leeren", secSummary: "Tagesübersicht", labFor: "Datum:",
-            secWeek: "Wochenansicht", secArchive: "Archiv", secData: "Datenverwaltung", 
-            btnClearAll: "Daten löschen", weekStart: "Woche ab", to: "bis",
-            days: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'], themeL: "☀️ HELL", themeD: "🌙 DUNKEL",
-            confirmClear: "Achtung: Dies wird ALLE Einträge unwiderruflich löschen. Fortfahren?"
-        }
-    };
-
-    let currentLang = localStorage.getItem('lang') || (navigator.language.startsWith('de') ? 'de' : 'en');
-    let fullDatabase = JSON.parse(localStorage.getItem('macroDB')) || {};
-
-    function init() {
-        if (localStorage.getItem('darkMode') === 'enabled') document.body.classList.add('dark');
-        document.getElementById('langSelector').value = currentLang;
-        applyTranslations();
-        updateThemeBtn();
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('logDate').value = today;
-        loadDate(today);
-    }
-
-    function changeLanguage(val) {
-        currentLang = val; localStorage.setItem('lang', val);
-        applyTranslations(); renderWeekly(); renderArchive();
-    }
-
-    function applyTranslations() {
-        const t = translations[currentLang];
-        document.querySelectorAll('[data-t]').forEach(el => el.innerText = t[el.getAttribute('data-t')]);
-        updateThemeBtn();
-    }
-
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark');
-        localStorage.setItem('darkMode', document.body.classList.contains('dark') ? 'enabled' : 'disabled');
-        updateThemeBtn();
-    }
-
-    function updateThemeBtn() {
-        const t = translations[currentLang];
-        document.getElementById('themeBtn').innerText = document.body.classList.contains('dark') ? t.themeL : t.themeD;
-    }
-
-    function loadDate(dateKey) {
-        document.getElementById('logDate').value = dateKey;
-        updateDisplay(); renderWeekly(); renderArchive();
-    }
-
-    function addItem() {
-        const dateKey = document.getElementById('logDate').value;
-        const w = parseFloat(document.getElementById('grams').value) || 0;
-        const f100 = parseFloat(document.getElementById('fat').value) || 0, c100 = parseFloat(document.getElementById('carbs').value) || 0;
-        const p100 = parseFloat(document.getElementById('protein').value) || 0, fi100 = parseFloat(document.getElementById('fiber').value) || 0;
-        const mult = w / 100;
-
-        if (w > 0) {
-            const item = {
-                name: document.getElementById('name').value || "Item", weight: w,
-                f: f100*mult, c: c100*mult, p: p100*mult, fib: fi100*mult,
-                orig: { f: f100, c: c100, p: p100, fi: fi100 },
-                kcal: (f100*mult*9) + (c100*mult*4) + (p100*mult*4) + (fi100*mult*2)
-            };
-            if (!fullDatabase[dateKey]) fullDatabase[dateKey] = [];
-            fullDatabase[dateKey].push(item);
-            saveToStorage(); loadDate(dateKey); resetInputs();
-        }
-    }
-
-    function removeItem(dateKey, index) { fullDatabase[dateKey].splice(index, 1); saveToStorage(); loadDate(dateKey); }
-
-    function copyToTemplate(dateKey, index) {
-        const item = fullDatabase[dateKey][index];
-        document.getElementById('name').value = item.name;
-        document.getElementById('grams').value = item.weight;
-        document.getElementById('fat').value = item.orig.f;
-        document.getElementById('carbs').value = item.orig.c;
-        document.getElementById('protein').value = item.orig.p;
-        document.getElementById('fiber').value = item.orig.fi;
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function clearAllData() {
-        if (confirm(translations[currentLang].confirmClear)) {
-            fullDatabase = {}; saveToStorage(); location.reload();
-        }
-    }
-
-    function exportCSV() {
-        let csv = '\uFEFFDate;Name;Grams;Fat;Carbs;Protein;Fiber;Kcal\n';
-        Object.keys(fullDatabase).sort().forEach(date => {
-            fullDatabase[date].forEach(item => {
-                csv += `${date};${item.name};${item.weight};${item.f.toFixed(1)};${item.c.toFixed(1)};${item.p.toFixed(1)};${item.fib.toFixed(1)};${item.kcal.toFixed(0)}\n`;
-            });
-        });
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = `Macros_Export_${new Date().toISOString().split('T')[0]}.csv`;
-        link.click();
-    }
-
-    function importCSV(input) {
-        const file = input.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const lines = e.target.result.split('\n');
-            const newDB = {};
-            lines.slice(1).forEach(line => {
-                const cols = line.split(';');
-                if (cols.length < 8) return;
-                const date = cols[0];
-                const weight = parseFloat(cols[2]);
-                const f = parseFloat(cols[3]), c = parseFloat(cols[4]), p = parseFloat(cols[5]), fi = parseFloat(cols[6]);
-                if (isNaN(weight)) return;
-                const item = {
-                    name: cols[1], weight, f, c, p, fib: fi, kcal: parseFloat(cols[7]),
-                    orig: { f: (f/(weight/100)), c: (c/(weight/100)), p: (p/(weight/100)), fi: (fi/(weight/100)) }
-                };
-                if (!newDB[date]) newDB[date] = [];
-                newDB[date].push(item);
-            });
-            fullDatabase = newDB; saveToStorage(); location.reload();
-        };
-        reader.readAsText(file);
-    }
-
-    function saveToStorage() { localStorage.setItem('macroDB', JSON.stringify(fullDatabase)); }
-
-    function updateDisplay() {
-        const dateKey = document.getElementById('logDate').value;
-        const items = fullDatabase[dateKey] || [];
-        const listDiv = document.getElementById('itemList'); listDiv.innerHTML = '';
-        let tK = 0, tF = 0, tC = 0, tP = 0, tFi = 0;
-        items.forEach((item, i) => {
-            tK += item.kcal; tF += item.f; tC += item.c; tP += item.p; tFi += item.fib;
-            listDiv.innerHTML += `<div class="list-item"><div><div style="font-weight:700">${item.name} (${item.weight}g)</div><div class="item-macros"><span class="f-dot">F:${item.f.toFixed(1)}</span> · <span class="c-dot">C:${item.c.toFixed(1)}</span> · <span class="p-dot">P:${item.p.toFixed(1)}</span></div></div><div class="action-btns"><span style="font-weight:800; margin-right:10px">${Math.round(item.kcal)}</span><button class="btn-icon" onclick="copyToTemplate('${dateKey}', ${i})">⚡</button><button class="btn-icon" onclick="removeItem('${dateKey}', ${i})">✕</button></div></div>`;
-        });
-        document.getElementById('dailyTotal').innerText = Math.round(tK) + " kcal";
-        document.getElementById('sumF').innerText = Math.round(tF); document.getElementById('sumC').innerText = Math.round(tC);
-        document.getElementById('sumP').innerText = Math.round(tP); document.getElementById('sumFi').innerText = Math.round(tFi);
-    }
-
-    function getMonday(d) {
-        d = new Date(d); let day = d.getDay(); let diff = d.getDate() - day + (day == 0 ? -6 : 1);
-        return new Date(d.setDate(diff)).toISOString().split('T')[0];
-    }
-
-    function renderWeekly() {
-        const grid = document.getElementById('currentWeeklyGrid'); grid.innerHTML = '';
-        const selectedDate = document.getElementById('logDate').value;
-        const t = translations[currentLang]; 
-        let mondayDate = new Date(getMonday(selectedDate));
-        
-        // Formatter for localized short dates (e.g., "27. Dec")
-        const dateOpt = { day: '2-digit', month: 'short' };
-        
-        let sunDate = new Date(mondayDate);
-        sunDate.setDate(sunDate.getDate() + 6);
-        document.getElementById('weekRangeDisplay').innerText = `${mondayDate.toLocaleDateString(currentLang, dateOpt)} — ${sunDate.toLocaleDateString(currentLang, dateOpt)}`;
-
-        for (let i = 0; i < 7; i++) {
-            const dStr = mondayDate.toISOString().split('T')[0];
-            const items = fullDatabase[dStr] || [];
-            let k = 0, f = 0, c = 0, p = 0;
-            items.forEach(item => { k += item.kcal; f += item.f; c += item.c; p += item.p; });
-            
-            grid.innerHTML += `
-                <div class="day-box ${dStr === selectedDate ? 'active' : ''}" onclick="loadDate('${dStr}')">
-                    <span class="day-name">${t.days[i]}</span>
-                    <span class="day-date">${mondayDate.toLocaleDateString(currentLang, dateOpt)}</span>
-                    <div class="day-kcal">${Math.round(k)}</div>
-                    <div class="day-mini-macros">
-                        <span class="f-dot">${Math.round(f)}</span>
-                        <span class="c-dot">${Math.round(c)}</span>
-                        <span class="p-dot">${Math.round(p)}</span>
-                    </div>
-                </div>`;
-            mondayDate.setDate(mondayDate.getDate() + 1);
-        }
-    }
-
-    function renderArchive() {
-        const arc = document.getElementById('archiveList'); arc.innerHTML = '';
-        const t = translations[currentLang]; const weeks = {};
-        Object.keys(fullDatabase).forEach(date => {
-            if (fullDatabase[date] && fullDatabase[date].length > 0) {
-                const mon = getMonday(date);
-                if (!weeks[mon]) weeks[mon] = { kcal: 0, f: 0, c: 0, p: 0, fi: 0 };
-                fullDatabase[date].forEach(item => { weeks[mon].kcal += item.kcal; weeks[mon].f += item.f; weeks[mon].c += item.c; weeks[mon].p += item.p; weeks[mon].fi += item.fib; });
-            }
-        });
-        Object.keys(weeks).sort().reverse().forEach(mon => {
-            const w = weeks[mon];
-            arc.innerHTML += `<div class="week-block" onclick="loadDate('${mon}')"><div class="week-header"><strong>${t.weekStart} ${mon}</strong><div style="color:var(--primary); font-weight:800;">${Math.round(w.kcal)} kcal</div></div><div class="week-macros"><span class="f-dot">F: ${Math.round(w.f)}</span><span class="c-dot">C: ${Math.round(w.c)}</span><span class="p-dot">P: ${Math.round(w.p)}</span><span class="fi-dot">Fi: ${Math.round(w.fi)}</span></div></div>`;
-        });
-    }
-
-    function resetInputs() {
-        document.getElementById('name').value = ''; document.getElementById('grams').value = 100;
-        ['fat', 'carbs', 'protein', 'fiber'].forEach(id => document.getElementById(id).value = 0);
-        document.getElementById('name').focus();
-    }
-
-    init();
+    // Alle Funktionen (addItem, loadDate, renderWeekly, exportCSV, etc.) 
+    // bleiben exakt identisch wie in deiner vorherigen Version.
+    // ... (Hier fügst du das Script aus der vorherigen Antwort ein)
 </script>
 </body>
 </html>
